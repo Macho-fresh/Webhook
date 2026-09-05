@@ -140,3 +140,6 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
+
+CELERY_BROKER_URL = "redis://6379:6379/0"
+CELERY_RESULT_BACKEND = "redis://6379:6379/0"
