@@ -48,7 +48,16 @@ class CreateEvent(APIView):
             event_type = 'payment.confirmed'
         )
 
-        sendrequest.delay(event.id)
+        for wh in Webhook.objects.filter(user=event.user, is_active=True):
+            if event.event_type not in wh.events:
+                continue
+            delivery = Deliveries.objects.create(
+                event = event,
+                webhook = wh,
+                attempts = 0    
+            )
+
+            sendrequest.delay(delivery.id)
 
         return Response({
             'message': 'in queue'
